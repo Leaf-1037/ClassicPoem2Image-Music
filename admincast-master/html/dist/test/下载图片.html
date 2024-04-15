@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
+      .custom-img{
+        width:300px;
+        height:300px;
+        border: 1px solid #000; /* 设置边框样式 */
+        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* 添加阴影效果 */
+      }
+    </style>
+</head>
+
+<body>
+    <input type="text" id="inputText" value="飞流直下三千尺"/>
+    <button type="button" class="btn btn-success" onclick="sendRequest()">提交</button>
+    <button type="button" class="btn btn-primary" onclick="download()">下载</button>
+     
+    
+    <!-- AJAX发送POST请求 -->
+    <script>
+            function sendRequest()
+            {
+              var inputElem = document.getElementById('inputText');
+              //inputElem.addEventListener('input', function() {//监听输入框事件
+                console.log(inputElem.value);
+                var url = 'http://172.20.0.112:7000/?param=' + inputElem.value; // 后端服务器地址 飞流直下三千尺
+            
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', url, true);
+                xhr.responseType = 'blob'; // 设置响应类型为二进制数据
+              
+                xhr.onreadystatechange = function() {
+                  if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                      var blob = xhr.response;
+                      console.log('Response:', typeof xhr.response);
+                      
+                      // 处理收到的图片数据
+                      if (blob.type.indexOf('image') !== -1) {
+                          var img = document.createElement('img');
+                          var imageURL = URL.createObjectURL(blob); // 创建包含图片数据的URL
+                          img.src = imageURL;
+                          img.classList.add('custom-img'); // 添加自定义类名
+                          img.id = 'your_image'; // 添加id属性
+                          document.body.appendChild(img);
+                      } else {
+                          console.error('Invalid image data');
+                      }
+                      // 在这里可以执行其他对图片数据的操作，例如压缩、裁剪等
+                    } else {
+                      console.error('Error:', xhr.status);
+                    }
+                  }
+                };
+              
+                xhr.send();
+                inputElem.value='';//清空输入框内容
+              //});
+            }
+            function download()
+         {
+            const image = document.getElementById('your_image');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = image.width;
+            canvas.height = image.height;
+            ctx.drawImage(image, 0, 0);
+            const url = canvas.toDataURL('image/jpeg');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'image.jpg';
+            a.click();
+
+         }
+          </script>
+</body>
+</html>

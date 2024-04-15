@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width initial-scale=1.0">
+    <title>诗画源境----基于多模态大模型的AI诗词作画生乐系统</title>
+    <!-- 引入css-->
+    <link href="./assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="./assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="./assets/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+    <link href="./assets/font-awesome/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+
+    <!-- 引入样式-->
+    <link href="assets/css/swiper.css" rel="stylesheet" />
+    <link href="assets/css/main.min.css" rel="stylesheet" />
+    <link href="assets/css/add.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.css">
+    <link rel="stylesheet" href="https://unpkg.com/swiper@8/swiper-bundle.min.css">
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.js"> </script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js"> </script>
+    <script src="https://unpkg.com/swiper@8/swiper-bundle.min.js.map"> </script>
+
+
+    <!--引入古风字体-->
+    <style>
+        @font-face {
+            font-family: 'hanyi';
+            src: url('./assets/font/hanyi.ttf') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'fanti';
+            src: url('./assets/font/fanti.TTF') format('truetype');
+        }
+
+        @font-face {
+            font-family: 'jiuzhou';
+            src: url('./assets/font/jiuzhou.ttf') format('truetype');
+        }
+
+        .navbar-font {
+            font-family: 'hanyi', serif;
+            font-size: 25px;
+            line-height: 1.5;
+            color: white;
+            text-align: center;
+        }
+
+        .poem-title {
+            font-family: 'hanyi', serif;
+            color: black;
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .poem-content {
+            font-family: 'hanyi', serif;
+            font-size: 33px;
+            line-height: 1.5;
+            color: black;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .poem-author {
+            font-family: 'hanyi', serif;
+            color: black;
+            font-size: 25px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .ibox-title {
+            font-family: 'Times New Roman', serif;
+        }
+
+        .pic-size {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .ancient-button {
+            background-color: #D2B48C;
+            /* 设置按钮的背景颜色 */
+            color: #8B4513;
+            /* 设置按钮的文字颜色 */
+            font-family: "微软雅黑", sans-serif;
+            /* 设置按钮的字体 */
+            font-size: 18px;
+            /* 设置按钮的字体大小 */
+            padding: 10px 20px;
+            /* 设置按钮的内边距 */
+            border: none;
+            /* 去除按钮的边框 */
+            cursor: pointer;
+            /* 设置鼠标悬停时的指针样式 */
+            transition: background-color 0.3s ease;
+            /* 添加过渡效果 */
+        }
+
+        .ancient-button:hover {
+            background-color: #CD853F;
+            /* 设置鼠标悬停时的背景颜色 */
+        }
+
+        .custom-img {
+            width: 600px;
+            height: 600px;
+            border: 1px solid #000;
+            /* 设置边框样式 */
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            /* 添加阴影效果 */
+            vertical-align: middle;
+            /* 让图片垂直居中 */
+            margin-left: 4.4%;
+            /* 使用 margin 属性实现水平居中 */
+        }
+
+        .custom-audio {
+            width: 600px;
+            vertical-align: middle;
+            /* 让进度条居中 */
+            margin-left: 4.4%;
+            /* 使用 margin 属性实现水平居中 */
+        }
+
+        .c1 {
+            background-image: url('./assets/img/水.jpeg');
+            background-size: 100% 100%;
+
+            opacity: 0.7;
+            /* 设置元素及其背景图片的透明度 */
+            height: 650px;
+            width: 100%;
+        }
+
+        .c2 {
+            height: 650x;
+            width: 100%;
+        }
+        .c5{
+            height: 650px;
+            width: 100%;
+        }
+        .c3 {
+            background-image: url('./assets/img/纯色.jpeg');
+            background-size: 100% 100%;
+
+            opacity: 0.7;
+            /* 设置元素及其背景图片的透明度 */
+            height: 600px;
+            width: 100%;
+        }
+
+        .c4 {
+            background-image: url('./assets/img/花.jpeg');
+            background-size: 100% 100%;
+
+
+            opacity: 0.7;
+            /* 设置元素及其背景图片的透明度 */
+            height: 600px;
+            width: 100%;
+        }
+        .param1style{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left:50px;
+        }
+        .param2style{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left:50px;
+        }
+        .param3style{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left:50px;
+        }
+        .param4style{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left:50px;
+        }
+        .param5style{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left:50px;
+        }
+        .param6style{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left:50px;
+        }
+        .param7style{
+            margin-top: 30px;
+            margin-bottom: 30px;
+            margin-left:50px;
+        }
+        .introduction{
+            margin-left:30px;
+            margin-top:15px;
+        }
+        .title{
+            margin-left:30px;
+            margin-top:15px;
+           
+        }
+        
+    </style>
+
+</head>
+
+<body class="fixed-navbar">
+    <div class="page-wrapper">
+        <!-- 头部导航栏-->
+        <header class="header" style="background-color:antiquewhite">
+            <div class="page-brand">
+                <span class="navbar-font">诗·画·乐</span>
+            </div>
+            <div class="flexbox flex-1">
+            </div>
+        </header>
+        <!-- 侧边导航栏-->
+        <nav class="page-sidebar" id="sidebar">
+            <div id="sidebar-collapse">
+                <div class="admin-block d-flex">
+                    <ul class="side-menu metismenu" style="position:fixed">
+                        <li>
+                            <a href="诗词成画.html"><i class="sidebar-item-icon fa fa-th-large"></i>
+                                <span class="navbar-font">诗词成画</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="诗词生乐.html"><i class="sidebar-item-icon fa fa-music"></i>
+                                <span class="navbar-font">诗词生乐</span></a>
+                        </li>
+                        <li>
+                            <a href="数据可视化.html"><i class="sidebar-item-icon fa fa-bar-chart"></i>
+                                <span class="navbar-font">数据可视化</span></a>
+                        </li>
+                        <li>
+                            <a href="更多应用.html"><i class="sidebar-item-icon fa fa-edit"></i>
+                                <span class="navbar-font">更多应用</span></a>
+                        </li>
+
+                        <li>
+                            <a href="主页.html"><i class="sidebar-item-icon fa fa-map"></i>
+                                <span class="navbar-font">返回主页</span></a>
+                        </li>
+                    </ul>
+                </div>
+        </nav>
+
+        <!-- 主体内容 -->
+        <div class="content-wrapper" style="background-color:antiquewhite">
+            <!-- START PAGE CONTENT-->
+            <div class="page-heading">
+                <h1 class="page-title">诗意画境·弦歌之韵 & 诗词成画 </h1>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="index.html"><i class="la la-home font-20"></i></a>
+                    </li>
+                    <li class="breadcrumb-item"> 诗意画境·弦歌之韵----基于中文文生图大模型“太乙”和AI生成音乐模型“Musicgen”的AI诗词作画生乐系统</li>
+                </ol>
+            </div>
+            <div class="page-content fade-in-up">
+                <div class="row">
+                    <!-- 文生图 -->
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-head" style="background-color:#97DBAE;">
+                                <i class="fa fa-file-text">
+                                    <strong style="font-family: 'Times New Roman', Times, serif;">
+                                        Tips: 输入诗词/点击提交/下载图片
+                                    </strong>
+                                </i>
+                            </div>
+                            <div class="ibox-body pd0">
+                                <div class="c1">
+                                    <div class="mbox" id="js-checks">
+                                        <label for=""><input type="radio" name="STYLE" value="">无</label>
+                                        <label for=""><input type="radio" name="STYLE" value="插画">插画</label>
+                                        <label for=""><input type="radio" name="STYLE" value="油画">油画</label>
+                                        <label for=""><input type="radio" name="STYLE" value="唯美">唯美</label>
+                                        <label for=""><input type="radio" name="STYLE" value="朦胧">朦胧</label>
+                                        <label for=""><input type="radio" name="STYLE" value="细致">细致</label>
+                                        <label for=""><input type="radio" name="STYLE" value="水彩">水彩</label>
+                                        <label for=""><input type="radio" name="STYLE" value="水墨">水墨</label>
+                                        <label for=""><input type="radio" name="STYLE" value="文艺">文艺</label>
+                                        <label for=""><input type="radio" name="STYLE" value="清新">清新</label>
+                                        <label for=""><input type="radio" name="STYLE" value="黑白">黑白</label>
+                                    </div>
+                                    
+                                    <input type="text" id="inputText" class="ipt" placeholder="在此输入诗词" />
+                                    <button type="button" class="btn btn-success custom-btn btn-14"
+                                        onclick="sendRequest(this.value)">提交</button>
+                                    <button type="button" class="btn btn-success custom-btn btn-14"
+                                        onclick="download()">下载图片</button>
+                                    <input type="file" id="imagefile" style="margin-left:16px;" >
+                                    (请上传jpg格式图片)
+                                    <!-- 这里是会出现的历史纪录列表样式 -->
+                                    <div class="history ">
+                                        <ul>
+                                            <!-- <li>
+                                                月落乌啼霜满天
+                                            </li> -->
+
+                                        </ul>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-head" style="background-color:#C3E5AE">
+                                <i class="fa fa-image">
+                                    <strong>显示图片</strong>
+                                </i>
+
+                            </div>
+                            <div class="ibox-body pd0">
+                                <!-- 图片垂直居中 -->
+                                <div class="c5">
+                                    <div class="pic-size mtu">
+                                        <div id="loading" style="text-align: center;padding-top: 30%;display: none;">
+                                            <img src="assets/img/loading.gif" style="width: 80px">
+                                        </div>
+                                        <!-- 轮播图 -->
+                                        <div class="swiper mySwiper">
+                                            <div class="swiper-wrapper" id="imageContainer">
+
+                                                <!-- <div class="swiper-slide">
+                                                    <img src="blob:http://127.0.0.1:5500/46230c67-d73c-4e6d-a9dd-a5184305b073"
+                                                        class="custom-img" id="your-img">
+                                                </div> -->
+
+                                            </div>
+                                            <div class="swiper-button-next"></div>
+                                            <div class="swiper-button-prev"></div>
+                                            <div class="swiper-pagination"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 输入参数 -->
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-head" style="background-color:#D5E0EA">
+                                <i class="fa fa-image">
+                                    <strong>输入参数</strong>
+                                </i>
+
+                            </div>
+                            <div class="ibox-body pd0">
+                                <!-- 图片垂直居中 -->
+                                <div class="c2">
+                                    <div>
+                                      <div class="param1style">
+                                        <strong>negative prompt:</strong>
+                                        <hr/>
+                                        <input type="text" id="param1" class="ipt" style="border:1px solid #000">
+                                        <button type="button" class="btn btn-success" onclick="submitData1()">修改参数</button>
+                                      </div>
+                                      <div class="param2style">
+                                        <strong>guidance_scale:</strong>
+                                        <hr/>
+                                        <input type="number" id="param2" class="ipt" style="border:1px solid #000">
+                                        <button type="button" class="btn btn-success" onclick="submitData2()">修改参数</button>
+                                      </div>
+                                      <div class="param3style">
+                                        <strong>num_inference_steps:</strong>
+                                        <hr/>
+                                        <input type="number" id="param3" class="ipt" style="border:1px solid #000">
+                                        <button type="button" class="btn btn-success" onclick="submitData3()">修改参数</button>
+                                      </div>
+                                      <div class="param4style">
+                                        <strong> seed:</strong>
+                                        <hr/>
+                                        <input type="number" id="param4" class="ipt" style="border:1px solid #000">
+                                        <button type="button" class="btn btn-success" onclick="submitData4()">修改参数</button>
+                                      </div>
+                                      <div class="param7style">
+                                        <strong> alpha:</strong>
+                                        <hr/>
+                                        <input type="number" id="param7" class="ipt" style="border:1px solid #000">
+                                        <button type="button" class="btn btn-success" onclick="submitData7()">修改参数</button>
+                                        <hr/>
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <!-- 参数说明 -->
+                    <div class="col-md-6">
+                        <div class="ibox">
+                            <div class="ibox-head" style="background-color:#F6E9EA">
+                                <i class="fa fa-image">
+                                    <strong>参数说明</strong>
+                                </i>
+
+                            </div>
+                            <div class="ibox-body pd0">
+                               
+                                <div class="c2" style="height:680px;">
+                                    <div>
+                                        <hr/>
+                                        <strong class="title">negative prompt：</strong>
+                                        <hr/>
+                                        <p class="introduction">一些负面词汇，不希望出现在生成图像中的东西</p>
+                                        <hr/>
+                                        <strong class="title">guidance_scale：</strong>
+                                        <hr/>
+                                        <p class="introduction">一种提高对Prompt以及整体样本质量的依从性的方法。
+                                            它也被称为 "无分类器引导"（classifier-free guidance），简单来说，
+                                            就是以牺牲图像质量或多样性为代价，迫使生成的图像更好地与提示相匹配。
+                                            对于我们的模型来说，7 到 8.5 之间的值通常是不错的选择。默认情况下使用 7.5 的 guidance_scale</p>
+                                            <hr/>
+                                        <strong class="title">num_inference_steps:</strong>
+                                        <hr/>
+                                        <p class="introduction">一般来说，步数越多，结果越好，但步数越多，生成时间越长。
+                                            我们的模型在使用相对较少的步数时效果很好，因此建议使用默认的 50 步推理步数。
+                                            如果希望得到更快的结果，可以使用更小的步数。如果想要更高质量的结果，可以使用更大的步数。</p>
+                                            <hr/>
+                                        <strong class="title">seed:</strong>
+                                        <hr/>  
+                                        <p class="introduction">可以是任意整数。如果想要确定性的输出，可以使用随机种子并将生成器传递给管道。
+                                            每次使用相同种子的生成器，都会得到相同的图像输出。</p>
+                                            <hr/>
+                                        <strong class="title">alpha:</strong>
+                                        <hr/>  
+                                        <p class="introduction">生成图像和风格图片的相似程度,请设置0~1.0之间的值。</p>
+                                    <hr/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 底部-->
+            <footer class="page-footer" style="background-color:antiquewhite">
+                <div class="font-13" style="text-align: center;">诗画源境 <b>&</b> AI式浪漫</div>
+                <!-- <input id="file" type="file" name="filename"> -->
+            </footer>
+        </div>
+    </div>
+
+
+
+    <!-- BEGIN PAGA BACKDROPS-->
+    <div class="sidenav-backdrop backdrop"></div>
+    <div class="preloader-backdrop">
+        <div class="page-preloader">Loading</div>
+    </div>
+    <!-- END PAGA BACKDROPS-->
+    <!-- CORE PLUGINS-->
+    <script src="./assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/metisMenu/dist/metisMenu.min.js" type="text/javascript"></script>
+    <script src="./assets/vendors/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+    <script src="./assets/js/swiper.min.js" type="text/javascript"></script>
+
+    <script>
+        function submitData1() {
+            var inputValue = document.getElementById('param1').value;
+           // 创建一个新的XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+
+           // 设置请求方法和URL
+            xhr.open("POST", "https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?negative_prompt="+inputValue);
+
+            // 设置请求头
+             xhr.setRequestHeader("Content-Type", "text/plain");
+
+             // 监听请求状态变化
+         xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                // 请求成功，处理响应数据
+                console.log(xhr.responseText);
+            } else {
+            // 请求失败，处理错误
+               console.error('Request failed with status:', xhr.status);
+            }
+        }
+    };
+
+            // 发送请求
+        xhr.send();
+
+        }
+          function submitData2() {
+            var inputValue = document.getElementById('param2').value;
+           // 创建一个新的XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+
+           // 设置请求方法和URL
+            xhr.open("POST", "https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?guidance_scale="+inputValue);
+
+            // 设置请求头
+             xhr.setRequestHeader("Content-Type", "text/plain");
+
+             // 监听请求状态变化
+         xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                // 请求成功，处理响应数据
+                console.log(xhr.responseText);
+            } else {
+            // 请求失败，处理错误
+               console.error('Request failed with status:', xhr.status);
+            }
+        }
+    };
+
+            // 发送请求
+        xhr.send();
+
+          }
+          function submitData3() {
+            var inputValue = document.getElementById('param3').value;
+           // 创建一个新的XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+
+           // 设置请求方法和URL
+            xhr.open("POST", "https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?num_inference_steps="+inputValue);
+
+            // 设置请求头
+             xhr.setRequestHeader("Content-Type", "text/plain");
+
+             // 监听请求状态变化
+         xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                // 请求成功，处理响应数据
+                console.log(xhr.responseText);
+            } else {
+            // 请求失败，处理错误
+               console.error('Request failed with status:', xhr.status);
+            }
+        }
+    };
+
+            // 发送请求
+        xhr.send();
+
+          }
+          function submitData4() {
+            var inputValue = document.getElementById('param4').value;
+           // 创建一个新的XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+
+           // 设置请求方法和URL
+            xhr.open("POST", "https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?seed="+inputValue);
+
+            // 设置请求头
+             xhr.setRequestHeader("Content-Type", "text/plain");
+
+             // 监听请求状态变化
+         xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                // 请求成功，处理响应数据
+                console.log(xhr.responseText);
+            } else {
+            // 请求失败，处理错误
+               console.error('Request failed with status:', xhr.status);
+            }
+        }
+    };
+
+            // 发送请求
+        xhr.send();
+
+          }
+
+          
+          function submitData7() {
+            var inputValue = document.getElementById('param7').value;
+           // 创建一个新的XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+
+           // 设置请求方法和URL
+            xhr.open("POST", "https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?alpha="+inputValue);
+
+            // 设置请求头
+             xhr.setRequestHeader("Content-Type", "text/plain");
+
+             // 监听请求状态变化
+         xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                // 请求成功，处理响应数据
+                console.log(xhr.responseText);
+            } else {
+            // 请求失败，处理错误
+               console.error('Request failed with status:', xhr.status);
+            }
+        }
+    };
+
+            // 发送请求
+        xhr.send();
+
+          }           
+        function sendRequest(val) {//输入对图片的描述
+            var fileInput = document.getElementById('imagefile');
+            var file = fileInput.files[0];
+            console.log(fileInput);
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $('#loading').show();
+            $('#imageContainer').hide()
+            var inputElem = document.getElementById('inputText');
+            //inputElem.addEventListener('input', function() {//监听输入框事件
+            console.log(inputElem.value);
+            var checks = $('#js-checks input');
+            // 复选框条件
+            var param = [];
+            for (var i = 0; i < checks.length; i++) {
+                if (checks[i].checked) {
+                    param.push(checks[i].value);
+                }
+            }
+            if (!inputElem.value && !param.length) {
+                alert('请输入关键词');
+                return;
+            }
+            $('#loading').show();
+            $('#imageContainer').hide();
+            var strCheck = '';
+            if (param.length) {
+                strCheck = '<span style="padding-right:10px">' + param.join(',') + '</span>'
+            }
+            $('.history ul').append('<li>' + strCheck + inputElem.value + '</li>');
+            var param1=document.getElementById('param1');
+            var param2=document.getElementById('param2');
+            var param3=document.getElementById('param3');
+            var param4=document.getElementById('param4');
+            var param7=document.getElementById('param7');
+
+            var url = 'https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?text2image=' + inputElem.value + '，'+param.join('，') ; // 后端服务器地址 飞流直下三千尺
+            //桃李春风一杯酒，江湖夜雨十年灯
+            var urlx = 'https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?text2image=' + inputElem.value + '，'+param.join('，')+'&negative_prompt='+param1.value+'&guidance_scale='+param2.value+'&num_inference_steps='+param3.value+'&seed='+param4.value+'&alpha='+param7.value;
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', urlx, true);
+            xhr.responseType = 'blob'; // 设置响应类型为二进制数据
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        $('#loading').hide();
+                        $('#imageContainer').show();
+                        var blob = xhr.response;
+                        console.log('Response:', typeof xhr.response);
+
+                        // 处理收到的图片数据
+                        if (blob.type.indexOf('image') !== -1) {
+                            var img = document.createElement('img');
+                            var imageURL = URL.createObjectURL(blob); // 创建包含图片数据的URL
+                            img.src = imageURL;
+                            img.classList.add('custom-img'); // 添加自定义类名
+
+                            var imageContainer = document.getElementById('imageContainer');
+                            //imageContainer.innerHTML = ''; // 清空原有内容
+                            if ($(imageContainer).html() == '') {
+                                $(imageContainer).append('<div class="swiper-slide"><img src="' + imageURL + '" class="custom-img" id="your-img"></div>'); // 将图片添加到指定的<div>中
+                            } else {
+                                var eles = $(imageContainer).find('img');
+                                var str = '';
+                                for (var k = 0; k < eles.length; k++) {
+                                    str += '<div class="swiper-slide"><img src="' + eles[k].src + '" class="custom-img" id="your-img"></div>'
+                                }
+                                //var str1 = '';
+                                str += '<div class="swiper-slide"><img src="' + imageURL + '" class="custom-img" id="your-img"></div>';
+                                $(imageContainer).html(str)
+                            }
+
+                            //img.id = "your-img";
+                            setTimeout(function () {
+
+                                var swiper = new Swiper(".mySwiper", {
+                                    pagination: {
+                                        el: ".swiper-pagination",
+                                        type: "fraction",
+                                    },
+                                    navigation: {
+                                        nextEl: ".swiper-button-next",
+                                        prevEl: ".swiper-button-prev",
+                                    },
+                                    observeParents: true,
+                                    observer: true,
+                                });
+                                swiper.slideTo($(imageContainer).find('img').length - 1);
+                                swiper.update();
+
+                            }, 1000)
+
+                        } else {
+                            console.error('Invalid image data');
+                        }
+                        // 在这里可以执行其他对图片数据的操作，例如压缩、裁剪等
+                    } else {
+                        console.error('Error:', xhr.status);
+                    }
+                }
+            };
+            xhr.send(formData);
+
+            inputElem.value = '';//清空输入框内容
+            //});
+        }
+        function download() {//下载图片
+            var image = document.getElementById('your-img');
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            console.log(image.height);
+            console.log(image.width);
+            canvas.width = 512;
+            canvas.height = 512;
+            ctx.drawImage(image, 0, 0);
+            const url = canvas.toDataURL('image/png');
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'image.png';
+            a.click();
+        }
+        var urlx = '';
+        function upload(val) {//输入对音频的描述
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            console.log(fileInput);
+            var formData = new FormData();
+            formData.append('file', file);
+
+            $('#loading1').show();
+            $('#audioContainer').hide()
+            var inputElem = document.getElementById('textInput');
+            console.log(inputElem.value);
+            var checks = $('#js-checks1 input');
+            // 复选框条件
+            var param = [];
+            for (var i = 0; i < checks.length; i++) {
+                if (checks[i].checked) {
+                    param.push(checks[i].value);
+                }
+            }
+            if (!inputElem.value && !param.length) {
+                alert('请输入关键词');
+                return;
+            }
+            $('#loading1').show();
+            $('#audioContainer').hide();
+            var strCheck = '';
+            if (param.length) {
+                strCheck = '<span style="padding-right:10px">' + param.join(',') + '</span>'
+            }
+            $('.history1 ul').append('<li>' + strCheck + inputElem.value + '</li>');
+            //var inputElem = document.getElementById('textInput');
+            //console.log(inputElem.value);
+            urlx = 'https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/upload?text2music=' + inputElem.value + '，'+param.join('，'); // 后端服务器地址 飞流直下三千尺
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', urlx, true);
+            xhr.responseType = 'arraybuffer'; // 设置响应类型为二进制数据
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    console.log(xhr.status);
+                    if (xhr.status === 200) {
+                        $('#loading1').hide();
+                        $('#audioContainer').show();
+                        var arrayBuffer = xhr.response;
+                        console.log('Response:', arrayBuffer.byteLength);
+
+                        // 处理收到的音频数据
+                        var blob = new Blob([arrayBuffer], { type: 'audio/wav' }); // 创建包含音频数据的 Blob
+                        console.log(blob.size)
+                        var audio = document.createElement('audio');
+                        console.log(audio.size)
+                        var audioURL = URL.createObjectURL(blob); // 创建包含音频数据的URL
+                        console.log(audioURL)
+                        audio.src = audioURL;
+                        audio.controls = true; // 添加音频控件
+                        audio.classList.add('custom-audio'); // 添加自定义类名
+
+                        var audioContainer = document.getElementById('audioContainer');
+                        audioContainer.innerHTML = ''; // 清空原有内容
+                       
+                        audioContainer.appendChild(audio); // 将音频添加到指定的<div>中
+                        audio.id = "your-audio";
+                        // 在这里可以执行其他对音频数据的操作，例如播放、混音等
+                         
+
+                    } else {
+                        console.error('Error:', xhr.status);
+                    }
+                }
+            };
+            xhr.send(formData);
+            //xhr.send();
+            inputElem.value = ''; //清空输入框内容
+
+        }
+
+        function downloadMp3(filePath) {//下载mp3
+            fetch(filePath).then(res => res.blob()).then(blob => {
+                const a = document.createElement('a');
+                document.body.appendChild(a)
+                a.style.display = 'none'
+                const url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = 'exported_audio.mp3';
+                a.click();
+                document.body.removeChild(a)
+                window.URL.revokeObjectURL(url);
+            });
+        }
+        function downloadmusic() {
+            this.downloadMp3(urlx.replace('upload',''));
+        }
+        function uploadmusic()//上传本地音频
+        {
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            console.log(fileInput);
+            var formData = new FormData();
+            formData.append('file', file);
+      
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://u248570-91e8-ef524dd9.westb.seetacloud.com:8443/upload', true);
+            xhr.onload = function() {
+              if (xhr.status === 200) {
+                console.log('文件上传成功');
+              } else {
+                console.error('文件上传失败');
+              }
+            };
+            xhr.send(formData); 
+        }
+    </script>
+
+    <!-- PAGE LEVEL PLUGINS-->
+    <!-- CORE SCRIPTS-->
+    <script src="assets/js/app.min.js" type="text/javascript"></script>
+
+    <!-- PAGE LEVEL SCRIPTS-->
+</body>
+
+</html>

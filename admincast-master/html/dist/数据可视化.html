@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width initial-scale=1.0">
+  <title>诗画源境----基于多模态大模型的AI诗词作画生乐系统</title>
+  <!-- 引入css-->
+  <link href="./assets/vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="./assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+  <link href="./assets/vendors/themify-icons/css/themify-icons.css" rel="stylesheet" />
+  <link href="./assets/font-awesome/font-awesome-4.7.0/css/font-awesome.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+  <!-- 引入样式-->
+  <link href="assets/css/main.min.css" rel="stylesheet" />
+  <link href="assets/css/add.css" rel="stylesheet" />
+
+  <!--引入古风字体-->
+  <style>
+    @font-face {
+      font-family: 'hanyi';
+      src: url('./assets/font/hanyi.ttf') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'fanti';
+      src: url('./assets/font/fanti.TTF') format('truetype');
+    }
+
+    @font-face {
+      font-family: 'jiuzhou';
+      src: url('./assets/font/jiuzhou.ttf') format('truetype');
+    }
+
+    .navbar-font {
+      font-family: 'hanyi', serif;
+      font-size: 25px;
+      line-height: 1.5;
+      color: white;
+    }
+
+    .poem-title {
+      font-family: 'hanyi', serif;
+      color: black;
+      font-size: 48px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+     .text1{
+      font-family:'Times New Roman', Times, serif;
+      color: black;
+      font-size: 18px;
+     
+      margin: 10px;
+      
+     }
+     .head1{
+      color:deepskyblue;
+      text-align: center;
+      font-size:28px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+     }
+    .poem-content {
+      font-family: 'hanyi', serif;
+      font-size: 33px;
+      line-height: 1.5;
+      color: black;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .poem-author {
+      font-family: 'hanyi', serif;
+      color: black;
+      font-size: 25px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+
+    .ibox-title {
+      font-family: 'Times New Roman', serif;
+    }
+
+    .pic-size {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .ancient-button {
+      background-color: #D2B48C;
+      /* 设置按钮的背景颜色 */
+      color: #8B4513;
+      /* 设置按钮的文字颜色 */
+      font-family: "微软雅黑", sans-serif;
+      /* 设置按钮的字体 */
+      font-size: 18px;
+      /* 设置按钮的字体大小 */
+      padding: 10px 20px;
+      /* 设置按钮的内边距 */
+      border: none;
+      /* 去除按钮的边框 */
+      cursor: pointer;
+      /* 设置鼠标悬停时的指针样式 */
+      transition: background-color 0.3s ease;
+      /* 添加过渡效果 */
+    }
+
+    .ancient-button:hover {
+      background-color: #CD853F;
+      /* 设置鼠标悬停时的背景颜色 */
+    }
+
+    .custom-img {
+      width: 300px;
+      height: 300px;
+      border: 1px solid #000;
+      /* 设置边框样式 */
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+      /* 添加阴影效果 */
+      vertical-align: middle;
+      /* 让图片垂直居中 */
+    }
+
+    .c1 {
+      background-image: url('./assets/img/水.jpeg');
+      background-size: 600px 600px;
+
+      opacity: 0.7;
+      /* 设置元素及其背景图片的透明度 */
+      height: 600px;
+      width: 650px;
+    }
+
+    .c2 {
+      height: 600px;
+      width: 600px;
+    }
+
+    .c3 {
+      background-image: url('./assets/img/纯色.jpeg');
+      background-size: 600px 600px;
+
+      opacity: 0.7;
+      /* 设置元素及其背景图片的透明度 */
+      height: 600px;
+      width: 650px;
+    }
+
+    .c4 {
+      background-image: url('./assets/img/花.jpeg');
+      background-size: 600px 600px;
+
+      opacity: 0.7;
+      /* 设置元素及其背景图片的透明度 */
+      height: 600px;
+      width: 650px;
+    }
+  </style>
+
+</head>
+
+<body class="fixed-navbar">
+  <div class="page-wrapper">
+    <!-- 头部导航栏-->
+    <header class="header" style="background-color:antiquewhite">
+      <div class="page-brand">
+        <span class="navbar-font">诗·画·乐</span>
+      </div>
+      <div class="flexbox flex-1">
+
+
+      </div>
+    </header>
+
+
+
+    <!-- 侧边导航栏-->
+    <nav class="page-sidebar" id="sidebar">
+      <div id="sidebar-collapse">
+        <div class="admin-block d-flex">
+          <ul class="side-menu metismenu" style="position:fixed">
+            <li>
+              <a href="诗词成画.html"><i class="sidebar-item-icon fa fa-th-large"></i>
+                <span class="navbar-font">诗词成画</span>
+              </a>
+            </li>
+            <li>
+              <a href="诗词生乐.html"><i class="sidebar-item-icon fa fa-music"></i>
+                  <span class="navbar-font">诗词生乐</span></a>
+          </li>
+            <li>
+              <a href="数据可视化.html"><i class="sidebar-item-icon fa fa-bar-chart"></i>
+                <span class="navbar-font">数据可视化</span></a>
+            </li>
+            <li>
+              <a href="更多应用.html"><i class="sidebar-item-icon fa fa-edit"></i>
+                <span class="navbar-font">更多应用</span></a>
+            </li>
+
+            <li>
+              <a href="主页.html"><i class="sidebar-item-icon fa fa-map"></i>
+                <span class="navbar-font">返回主页</span></a>
+            </li>
+
+          </ul>
+        </div>
+    </nav>
+
+    <!-- 主体内容 -->
+    <div class="content-wrapper" style="background-color:antiquewhite">
+      <!-- START PAGE CONTENT-->
+      <div class="page-heading">
+        <h1 class="page-title">诗意画境·弦歌之韵 & 数据可视化 </h1>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a href="index.html"><i class="la la-home font-20"></i></a>
+          </li>
+          <li class="breadcrumb-item">诗意画境·弦歌之韵----基于中文文生图大模型“太乙”和AI生成音乐模型“Musicgen”的AI诗词作画生乐系统</li>
+        </ol>
+      </div>
+      <div class="page-content fade-in-up">
+        <div class="row">
+          <!-- 文生图 -->
+          <div class="col-md-6">
+            <div class="ibox">
+              <div class="ibox-head" style="background-color:#97DBAE;">
+                <i class="fa fa-file-text">
+
+                </i>
+                <button type="button" class="btn btn-success mbtn circle" onclick="showpie()">更新</button>
+
+              </div>
+              <div class="ibox-body">
+                <div id="pieChart" style="width: 600px;height:400px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="ibox">
+              <div class="ibox-head" style="background-color:#F1E1A6">
+                <i class="fa fa-image">
+
+                </i>
+                <button type="button" class="mbtn1 twinkle1" onclick="showbar()">更新</button>
+
+              </div>
+              <div class="ibox-body">
+                <!-- 图片垂直居中 -->
+                <div id="barChart" style="width: 600px;height:400px;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="ibox">
+              <div class="ibox-head" style="background-color:#bcd9f4">
+                <i class="fa fa-music">
+                  <strong>模型创新 & 自学习</strong>
+                </i>
+
+              </div>
+              <div class="ibox-body">
+                <div class="head1">
+                  数据增强——引入自学习机制
+                </div>
+                <hr/>
+                <div class="text1" style="height:400px;">
+                  为针对广大用户提供个性化的文生图服务，我们为"太乙"大模型添加了自学习机制，
+                  即在远端服务器保存每个用户每次输入的诗词数据，经过分词处理和词频统计后，
+                  赋予一定权重并重新作为数据集输入，
+                  从而生成更贴合诗词意境以及用户需求的图片，同时在页面显示用户累计输入诗词中分词的统计数据
+                  （默认情况则为上一次的历史输入统计）
+                  并可根据用户输入内容实时进行可视化展示。
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="ibox">
+              <div class="ibox-head" style="background-color:#F4BBBB">
+                <i class="fa fa-music">
+                  <strong>使用流程</strong>
+                </i>
+              </div>
+              <div class="ibox-body">
+                <img src="./assets/img/用户说明.jpg"/>
+              </div>
+            </div>
+           
+          </div>
+        </div>
+        <footer class="page-footer" style="background-color:antiquewhite">
+          <div class="font-13" style="text-align: center;">诗画源境 <b>&</b> AI式浪漫</div>
+        </footer>
+      </div>
+    </div>
+
+  </div>
+  </div>
+  <!-- 底部-->
+
+  </div>
+
+  </div>
+  </div>
+
+
+
+  <!-- BEGIN PAGA BACKDROPS-->
+  <div class="sidenav-backdrop backdrop"></div>
+  <div class="preloader-backdrop">
+    <div class="page-preloader">Loading</div>
+  </div>
+  <!-- END PAGA BACKDROPS-->
+  <!-- CORE PLUGINS-->
+  <script>
+    function pie() {
+      // 假设这是从服务器获取的 JSON 数据
+      const jsonData = {
+        "花": 100,
+        "鸟": 200,
+        "树": 300,
+        "山": 600,
+        "云": 800
+      };
+
+      // 转换 JSON 数据为 ECharts 饼图格式
+      const pieChartData = Object.keys(jsonData).map(key => ({ name: key, value: jsonData[key] }));
+
+      // 初始化饼图
+      const pieChart = echarts.init(document.getElementById('pieChart'));
+      pieChart.setOption({
+        title: {
+          text: '饼图示例'
+        },
+        series: [{
+          type: 'pie',
+          data: pieChartData,
+          label: {
+            show: true, // 显示标签  
+            color: '#333', // x 轴标签颜色
+            fontSize: 20 // 设置标签字体大小为 14px  
+          },
+        }]
+      });
+
+
+    }
+    function showpie() {
+      fetch('https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/renew')
+        .then(response => response.json())
+        .then(data => {
+          // 使用 ECharts 绘制图表
+          console.log(data);
+          var chartDom = document.getElementById('pieChart');
+          var myChart = echarts.init(chartDom);
+          var option;
+
+          // 使用从服务器获取的 JSON 数据绘制饼图
+          option = {
+            title: {
+              text: ''
+            },
+            tooltip: {
+              trigger: 'item'
+            },
+            legend: {
+              orient: 'vertical',
+              left: 'left'
+            },
+            series: [{
+              type: 'pie',
+              data: Object.keys(data).map(key => ({
+                value: data[key],
+                name: key
+              })),
+              label: {
+                show: true,
+                color: '#333',
+                fontSize: 20
+              }
+            }]
+          };
+
+          myChart.setOption(option);
+        })
+        .catch(error => {
+          console.error('请求出错：', error);
+        });
+    }
+    function showbar() {
+      fetch('https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/renew')
+      .then(response => response.json())
+      .then(data => {
+        // 使用 ECharts 绘制图表
+        console.log('datas', data);
+    
+        var chartDom = document.getElementById('barChart');
+        var myChart = echarts.init(chartDom);
+        var option;
+    
+        // 使用从服务器获取的 JSON 数据绘制柱状图
+        option = {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          yAxis: {
+            type: 'category', // 将 y 轴的 type 修改为 category
+            data: Object.keys(data)
+          },
+          xAxis: {
+            type: 'value' // 将 x 轴的 type 修改为 value
+          },
+          series: [{
+            data: Object.values(data), // 将横纵坐标对调
+            type: 'bar',
+            itemStyle: {
+              color: function(params) {
+                var colorList = ['#CEB1B3','#03517F','#D3DAE2','#789EB1','#E69B88','#96B593','#A3B784','#B6D5E9'];
+                return colorList[params.dataIndex % colorList.length];
+              }
+            }
+          }]
+        };
+    
+        myChart.setOption(option);
+      })
+      .catch(error => {
+        console.error('请求出错：', error);
+      });
+    
+    }
+    function bar() {
+      fetch('https://u248570-be19-60fef1f8.westb.seetacloud.com:8443/?renew=1')
+        .then(response => response.json())
+        .then(data => {
+          // 使用 ECharts 绘制图表
+          console.log('datas', data);
+
+
+          var chartDom = document.getElementById('barChart');
+          var myChart = echarts.init(chartDom);
+          var option;
+
+          // 使用从服务器获取的 JSON 数据绘制柱状图
+          option = {
+            tooltip: {
+              trigger: 'axis',
+              axisPointer: {
+                type: 'shadow'
+              }
+            },
+            xAxis: {
+              type: 'category',
+              data: Object.keys(data)
+            },
+            yAxis: {
+              type: 'value'
+            },
+            series: [{
+              data: Object.values(data),
+              type: 'bar',
+              //itemStyle: {
+                //color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  //{ offset: 0, color: '#83bff6' },
+                  //{ offset: 0.5, color: '#188df0' },
+                  //{ offset: 1, color: '#188df0' }
+                //])
+              //},
+              itemStyle: {
+                color: function(params) {
+                  var colorList = ['#CEB1B3','#03517F','#D3DAE2','#789EB1','#E69B88','#96B593','#A3B784','#B6D5E9'];
+                  return colorList[params.dataIndex % colorList.length];
+                }
+              },
+              emphasis: {
+                //itemStyle: {
+                 // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                   // { offset: 0, color: '#2378f7' },
+                    //{ offset: 0.7, color: '#2378f7' },
+                    //{ offset: 1, color: '#83bff6' }
+                  //])
+                //}
+                emphasis: {
+                  itemStyle: {
+                    color: function(params) {
+                      var colorList = ['#CEB1B3', '#03517F', '#D3DAE2', '#789EB1', '#E69B88', '#96B593', '#A3B784', '#B6D5E9'];
+                      return colorList[params.dataIndex % colorList.length];
+                    }
+                  }
+                }
+              },
+            }]
+          };
+
+          myChart.setOption(option);
+        })
+        .catch(error => {
+          console.error('请求出错：', error);
+        });
+    }
+  </script>
+  <script src="./assets/vendors/jquery/dist/jquery.min.js" type="text/javascript"></script>
+  <script src="./assets/vendors/popper.js/dist/umd/popper.min.js" type="text/javascript"></script>
+  <script src="./assets/vendors/bootstrap/dist/js/bootstrap.min.js" type="text/javascript"></script>
+  <script src="./assets/vendors/metisMenu/dist/metisMenu.min.js" type="text/javascript"></script>
+  <script src="./assets/vendors/jquery-slimscroll/jquery.slimscroll.min.js" type="text/javascript"></script>
+  <!-- PAGE LEVEL PLUGINS-->
+  <!-- CORE SCRIPTS-->
+  <script src="assets/js/app.min.js" type="text/javascript"></script>
+  <!-- PAGE LEVEL SCRIPTS-->
+</body>
+
+</html>

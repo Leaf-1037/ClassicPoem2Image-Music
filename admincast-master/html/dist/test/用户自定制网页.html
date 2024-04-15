@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.2.2/dist/echarts.min.js"></script>
+</head>
+<body>
+  <div id="barChart" style="width: 600px; height: 400px;"></div>
+  <script>
+    var jsonData = {
+      "category": ["A", "B", "C", "D", "E"],
+      "data": [10, 20, 15, 25, 18]
+    };
+    // 基于准备好的dom，初始化echarts实例
+var myChart = echarts.init(document.getElementById('barChart'));
+
+// 指定图表的配置项和数据
+var option = {
+  tooltip: {
+    trigger: 'axis',
+    axisPointer: {
+      type: 'shadow'
+    }
+  },
+  xAxis: {
+    type: 'category',
+    data: jsonData.category
+  },
+  yAxis: {
+    type: 'value'
+  },
+  series: [{
+    data: jsonData.data,
+    type: 'bar',
+    itemStyle: {
+      color: function(params) {
+        var colorList = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#749f83'];
+        return colorList[params.dataIndex % colorList.length];
+      }
+    }
+  }]
+};
+
+// 使用刚指定的配置项和数据显示图表。
+myChart.setOption(option);
+
+  </script>
+</body>
+</html>
